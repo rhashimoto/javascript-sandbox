@@ -1,0 +1,9 @@
+{
+  "name": "javascript-sandbox",
+  "description": "Run foreign code in a WebWorker with restricted network access.",
+  "main": "javascript-sandbox.js",
+  "dependencies": {
+    "lit-element": "^2.2.1"
+  },
+  "devDependencies": {}
+}
