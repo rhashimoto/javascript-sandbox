@@ -12,6 +12,9 @@ class JavascriptSandbox extends LitElement {
   render() {
     return html`
       <div>how now brown cow</div>
+      <iframe id="iframe"
+              width="0" height="0" style="display: none;"
+              src="../worker/worker.html" />
     `;
   }
 }
