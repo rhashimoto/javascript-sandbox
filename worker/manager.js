@@ -26,7 +26,7 @@
     switch (event.data.request) {
     case 'create':
       requests.set(event.data.requestId, (response) => {
-        event.source.postMessage(response.data);
+        event.source.postMessage(response.data, '*');
       });
 
       // For stronger security, create a worker for each function.
@@ -39,7 +39,7 @@
 
     case 'call':
       requests.set(event.data.requestId, (response) => {
-        event.source.postMessage(response.data);
+        event.source.postMessage(response.data, '*');
       });
       workers.get(workerId).postMessage(event.data);
       break;
@@ -47,7 +47,7 @@
     case 'destroy':
       workers.delete(workerId);
       workers.get(workerId).terminate();
-      event.source.postMessage({ requestId: event.data.requestId });
+      event.source.postMessage({ requestId: event.data.requestId }, '*');
       break;
     }
   });
