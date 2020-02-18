@@ -1,8 +1,9 @@
 import { LitElement, html, customElement } from 'lit-element';
 
 // const TARGET_ORIGIN = 'http://localhost:8081';
-const TARGET_ORIGIN = 'https://rhashimoto.github.io/javascript-sandbox';
-const IFRAME_URL = TARGET_ORIGIN + '/worker/worker.html';
+// const IFRAME_URL = TARGET_ORIGIN + '/worker/worker.html';
+const TARGET_ORIGIN = 'https://rhashimoto.github.io';
+const IFRAME_URL = TARGET_ORIGIN + '/javascript-sandbox/worker/worker.html';
 
 /**
  * `javascript-sandbox`
