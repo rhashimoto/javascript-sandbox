@@ -1,8 +1,8 @@
 'use strict';
 
 (() => {
+  // Install the service worker.
   let serviceWorkerRegistration = new Promise((resolve, reject) => {
-    // Install the service worker.
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function() {
         navigator.serviceWorker.register('./sw.js').then(resolve, reject);
@@ -12,27 +12,43 @@
     }
   });
 
+  // Set up handler for responses from workers.
   let requests = new Map();
-  let worker = serviceWorkerRegistration.then(() => {
-    if ('Worker' in window) {
-      let worker = new Worker('worker.js');
-      worker.addEventListener('message', (event) => {
-        requests.get(event.data.requestId)(event);
-        requests.delete(event.data.requestId);
-      });
-      return worker;
-    }
-    throw new Error('Worker not supported in this browser.');
-  });
+  let workerListener = (event) => {
+    requests.get(event.data.requestId)(event);
+    requests.delete(event.data.requestId);
+  };
 
+  // Listen for messages from the custom element.
+  let workers = new Map();
   window.addEventListener('message', async (event) => {
-    console.log('manager message', event);
+    let workerId = event.data.functionId || event.data.requestId;
+    switch (event.data.request) {
+    case 'create':
+      requests.set(event.data.requestId, (response) => {
+        event.source.postMessage(response.data);
+      });
 
-    requests.set(event.data.requestId, (response) => {
-      event.source.postMessage(response.data);
-    });
-    (await worker).postMessage(event.data);
+      // For stronger security, create a worker for each function.
+      await serviceWorkerRegistration;
+      let worker = new Worker('worker.js');
+      workers.set(workerId, worker);
+      worker.addEventListener('message', workerListener);
+      worker.postMessage(event.data);
+      break;
+
+    case 'call':
+      requests.set(event.data.requestId, (response) => {
+        event.source.postMessage(response.data);
+      });
+      workers.get(workerId).postMessage(event.data);
+      break;
+
+    case 'destroy':
+      workers.delete(workerId);
+      workers.get(workerId).terminate();
+      event.source.postMessage({ requestId: event.data.requestId });
+      break;
+    }
   });
 })();
-
-console.log('Hello, manager!');

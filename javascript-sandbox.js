@@ -87,7 +87,11 @@ class JavascriptSandbox extends LitElement {
       // Register the callback.
       this._requests.set(request.requestId, (event) => {
         this._requests.delete(request.requestId);
-        resolve(event);
+        if (!event.data.error) {
+          resolve(event);
+        } else {
+          reject(event.data.error);
+        }
       });
 
       // Send the message.
