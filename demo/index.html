@@ -18,8 +18,8 @@
     <script>
       window.addEventListener('load', async (event) => {
         let sandbox = document.querySelector('javascript-sandbox');
-        let functionId = await sandbox.createFunction("console.log('hello function');");
-        let result = await sandbox.callFunction(functionId, {});
+        let functionId = await sandbox.createFunction("return JSON.stringify(args);");
+        let result = await sandbox.callFunction(functionId, { foo: 'bar' });
         console.log('result', result);
       });
     </script>
