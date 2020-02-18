@@ -15,5 +15,13 @@
   </head>
   <body>
     <javascript-sandbox></javascript-sandbox>
+    <script>
+      window.addEventListener('load', async (event) => {
+        let sandbox = document.querySelector('javascript-sandbox');
+        let functionId = await sandbox.createFunction("console.log('hello function');");
+        let result = await sandbox.callFunction(functionId, {});
+        console.log('result', result);
+      });
+    </script>
   </body>
 </html>

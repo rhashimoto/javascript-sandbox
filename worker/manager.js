@@ -26,5 +26,13 @@ setTimeout(() => {
 }, 3000);
 
 // TODO: Handle messages.
+window.addEventListener('message', (event) => {
+  console.log('manager message', event);
+
+  event.source.postMessage({
+    requestId: event.data.requestId,
+    functionId: event.data.requestId
+  });
+});
 
 console.log('Hello, manager!');
