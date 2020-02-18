@@ -32,16 +32,12 @@
           let args = document.getElementById('args').value;
           let code = document.getElementById('code').value;
           
-          let functionId = await sandbox.createFunction(code);
-          let result = await sandbox.callFunction(functionId, JSON.parse(args));
+          let functionId = await sandbox.createFunction(code || 'return args;');
+          let result = await sandbox.callFunction(functionId, JSON.parse(args || 'null'));
 
           document.getElementById('output').textContent = JSON.stringify(result);
           await sandbox.destroyFunction(functionId);
         });
-        
-        // let functionId = await sandbox.createFunction("return JSON.stringify(args);");
-        // let result = await sandbox.callFunction(functionId, { foo: 'bar' });
-        // console.log('result', result);
       });
     </script>
   </body>
