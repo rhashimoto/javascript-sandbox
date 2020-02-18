@@ -7,6 +7,7 @@
     <title>javascript-sandbox demo</title>
 
     <script type="module" src="../output/javascript-sandbox.js"></script>
+    <!-- <script type="module" src="../src/javascript-sandbox.js"></script> -->
 
     <custom-style>
       <style is="custom-style" include="demo-pages-shared-styles">
@@ -28,15 +29,22 @@
 
         document.getElementById('execute').addEventListener('click', async (event) => {
           event.preventDefault();
-          
-          let args = document.getElementById('args').value;
-          let code = document.getElementById('code').value;
-          
-          let functionId = await sandbox.createFunction(code || 'return args;');
-          let result = await sandbox.callFunction(functionId, JSON.parse(args || 'null'));
 
-          document.getElementById('output').textContent = JSON.stringify(result);
-          await sandbox.destroyFunction(functionId);
+          let functionId = undefined;
+          try {
+            let args = document.getElementById('args').value;
+            let code = document.getElementById('code').value;
+            
+            functionId = await sandbox.createFunction(code || 'return args;');
+            let result = await sandbox.callFunction(functionId, JSON.parse(args || 'null'));
+            document.getElementById('output').textContent = JSON.stringify(result);
+          } catch (e) {
+            document.getElementById('output').textContent = e.toString();
+          } finally {
+            if (functionId) {
+              await sandbox.destroyFunction(functionId);
+            }
+          }
         });
       });
     </script>

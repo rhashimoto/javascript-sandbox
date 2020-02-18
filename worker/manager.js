@@ -29,7 +29,7 @@
         event.source.postMessage(response.data, '*');
       });
 
-      // For stronger security, create a worker for each function.
+      // Create a worker for each function.
       await serviceWorkerRegistration;
       let worker = new Worker('worker.js');
       workers.set(workerId, worker);
