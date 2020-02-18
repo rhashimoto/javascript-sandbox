@@ -42,7 +42,6 @@ class JavascriptSandbox extends LitElement {
   // @override
   render() {
     return html`
-      <div>how now brown cow</div>
       <iframe id="iframe" width="0" height="0" style="display: none;" />
     `;
   }
@@ -100,7 +99,6 @@ class JavascriptSandbox extends LitElement {
   }
   
   _handleMessage(event) {
-    console.log('lit-element message', event);
     if (event.origin !== TARGET_ORIGIN) return;
 
     const f = this._requests.get(event.data.requestId);

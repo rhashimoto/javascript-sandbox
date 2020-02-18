@@ -3,7 +3,6 @@
 (() => {
   let f = undefined;
   onmessage = async (event) => {
-    console.log('worker message', event);
     switch (event.data.request) {
     case 'create':
       f = new Function('args', event.data.code);
