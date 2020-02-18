@@ -1,7 +1,5 @@
 'use strict';
 
-console.log('Hello from Service Worker!');
-
 self.addEventListener('fetch', (event) => {
   event.respondWith(
     self.clients.get(event.clientId).then((client) => {

@@ -45,8 +45,8 @@
       break;
 
     case 'destroy':
-      workers.delete(workerId);
       workers.get(workerId).terminate();
+      workers.delete(workerId);
       event.source.postMessage({ requestId: event.data.requestId }, '*');
       break;
     }

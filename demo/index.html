@@ -14,13 +14,34 @@
     </custom-style>
   </head>
   <body>
+    <form>
+      <div><textarea id="args" rows="6" cols="80" placeholder="args"></textarea></div>
+      <div><textarea id="code" rows="12" cols="80" placeholder="code"></textarea></div>
+      <input id="execute" type="submit" value="Execute" />
+    </form>
+    <div id="output" ></div>
+    
     <javascript-sandbox></javascript-sandbox>
     <script>
       window.addEventListener('load', async (event) => {
         let sandbox = document.querySelector('javascript-sandbox');
-        let functionId = await sandbox.createFunction("return JSON.stringify(args);");
-        let result = await sandbox.callFunction(functionId, { foo: 'bar' });
-        console.log('result', result);
+
+        document.getElementById('execute').addEventListener('click', async (event) => {
+          event.preventDefault();
+          
+          let args = document.getElementById('args').value;
+          let code = document.getElementById('code').value;
+          
+          let functionId = await sandbox.createFunction(code);
+          let result = await sandbox.callFunction(functionId, JSON.parse(args));
+
+          document.getElementById('output').textContent = JSON.stringify(result);
+          await sandbox.destroyFunction(functionId);
+        });
+        
+        // let functionId = await sandbox.createFunction("return JSON.stringify(args);");
+        // let result = await sandbox.callFunction(functionId, { foo: 'bar' });
+        // console.log('result', result);
       });
     </script>
   </body>
